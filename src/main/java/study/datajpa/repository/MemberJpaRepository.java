@@ -1,6 +1,7 @@
 package study.datajpa.repository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.Entity.Member;
 
 import javax.persistence.Entity;
@@ -36,5 +37,13 @@ public class MemberJpaRepository {
         return em.createQuery("select count(m) from Member m where m.age = :age", Long.class)
                 .setParameter("age", age)
                 .getSingleResult();
+    }
+
+    @Transactional
+    public int bulkAgePlus(int age) {
+        return em.createQuery("update Member m set m.age = m.age + 1" +
+                "where m.age >= :age")
+                .setParameter("age", age)
+                .executeUpdate();
     }
 }
