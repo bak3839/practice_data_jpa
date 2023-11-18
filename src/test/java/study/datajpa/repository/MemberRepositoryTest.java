@@ -207,4 +207,33 @@ public class MemberRepositoryTest {
             System.out.println("member.team = " + member.getTeam().getName());
         }
     }
+
+    @Test
+    public void queryHint() {
+        //given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush(); // 영속성 컨텍스트 내용을 DB에 동기화
+        em.clear(); // 영속성 컨텍스트 비우기
+
+        //when
+        // 변경감지를 위해 스냅샷과 원본 데이터를 모두 저장하므로 메모리를 더 차지한다.
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2");
+
+        // 원본 데이터와 비교하여 변경된 부분이 있으면 변경감지가 작동하여 update 쿼리 생성
+        em.flush();
+    }
+
+    @Test
+    public void queryLock() {
+        //given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush(); // 영속성 컨텍스트 내용을 DB에 동기화
+        em.clear(); // 영속성 컨텍스트 비우기
+
+        //when
+        List<Member> result = memberRepository.findLockByUsername("member1");
+    }
 }
