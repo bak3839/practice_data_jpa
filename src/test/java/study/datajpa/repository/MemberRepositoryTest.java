@@ -60,6 +60,18 @@ public class MemberRepositoryTest {
     }
 
     @Test
+    public void testNamedQuery2() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("AAA", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> result = memberRepository.findByUsernameAndAge("AAA", 10);
+        Member findMember = result.get(0);
+        assertThat(findMember).isEqualTo(m1);
+    }
+
+    @Test
     public void testQuery() {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("AAA", 20);
@@ -235,5 +247,10 @@ public class MemberRepositoryTest {
 
         //when
         List<Member> result = memberRepository.findLockByUsername("member1");
+    }
+
+    @Test
+    public void callCustom() {
+        List<Member> memberCustom = memberRepository.findMemberCustom();
     }
 }
