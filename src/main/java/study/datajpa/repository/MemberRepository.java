@@ -13,7 +13,7 @@ import javax.persistence.QueryHint;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, JpaSpecificationExecutor<Member> {
     //@Query(name ="Member.findByUsername")
     List<Member> findByUsername(@Param("username") String username);
     List<Member> findByUsernameAndAge(@Param("username") String username, @Param("age") int age);
